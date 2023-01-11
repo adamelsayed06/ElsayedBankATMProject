@@ -49,11 +49,17 @@ Scanner scan = new Scanner(System.in);
 
                 if(depositAccountType.equals("C") || depositAccountType.equals("c")){
                     checkingAccount.addMoney(depositAmount);
+                    printRecieptHeader();
+                    System.out.println("Deposited " + depositAmount + " into checking account.");
                 }
 
                 if(depositAccountType.equals("S") || depositAccountType.equals("s")){
                     savingsAccount.addMoney(depositAmount);
+                    printRecieptHeader();
+                    System.out.println("Deposited " + depositAmount + " into savings account.");
                 }
+
+
 
             }
 
@@ -71,7 +77,11 @@ Scanner scan = new Scanner(System.in);
                     checkingAccount.subtractMoney(amountTransferred);
                     savingsAccount.addMoney(amountTransferred);
 
-                    printRecieptHeader(); //add info
+                    printRecieptHeader();
+
+                    System.out.println("Deposited " + amountTransferred + " into savings account.");
+                    System.out.println("Withdraw " + amountTransferred + " from checkings account");
+
                 }
 
                 if(moneyFrom.equals("S") || moneyFrom.equals("s")){
@@ -82,7 +92,9 @@ Scanner scan = new Scanner(System.in);
                     checkingAccount.addMoney(amountTransferred);
                     savingsAccount.subtractMoney(amountTransferred);
 
-                    printRecieptHeader(); //add info
+                    printRecieptHeader();
+                    System.out.println("Deposited " + amountTransferred + " into checking account.");
+                    System.out.println("Withdraw " + amountTransferred  + " from savings account");
                 }
             }
 
@@ -105,11 +117,11 @@ Scanner scan = new Scanner(System.in);
 
             System.out.println("Would you like to do anything else? (y/n)");
             response = scan.nextLine();
-            if(response.equals("n")){
+            if(response.equals("n") || response.equals("N")){
                 System.out.println("Thank you for being a customer!");
                 answer = 6;
             }
-            if(response.equals("y")){
+            if(response.equals("y") || response.equals("Y")){
                 System.out.println("Please re-enter your password.");
                 enteredPIN = scan.nextInt();
             }
@@ -133,4 +145,4 @@ Scanner scan = new Scanner(System.in);
     }
 }
 
-//stuff to add: reciepts for all, error system, checking for capital and lowercase inputs, pin checking system, and logic for withdraw.
+//stuff to add: error system, pin checking system, and logic for withdraw.
