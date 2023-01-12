@@ -10,7 +10,9 @@ public class ATM {
     private String depositAccountType;
     private String moneyFrom;
     private int amountTransferred;
-
+    private int withdrawAmount;
+    private boolean validAmount = false;
+private boolean error;
 Scanner scan = new Scanner(System.in);
 
     public void welcomeUser(){
@@ -29,15 +31,56 @@ Scanner scan = new Scanner(System.in);
         Account savingsAccount = new Account("Savings", customer);
         Account checkingAccount = new Account("Checkings", customer);
 
-        while(answer != 6){
+        while(answer != 6 && error == false){
 
             mainMenu();
             answer = scan.nextInt();
             scan.nextLine();
 
 
-            if(answer == 1){
+            while (answer == 1 && !(validAmount)){
+                System.out.println("Which account would you like to withdraw from? (C)hecking or (S)avings");
+                String str = scan.nextLine();
+
                 System.out.println("How much would you like to withdraw?");
+                withdrawAmount = scan.nextInt();
+                scan.nextLine();
+
+                if(str.equals("C") || str.equals("c")){
+                    if(withdrawAmount % 5 != 0){
+                        System.out.println("Invalid Amount: Please try again!");
+                        System.exit(0);
+                    }
+                    if(withdrawAmount > checkingAccount.getAccountBalance()){
+                        System.out.println("Error: Invalid Funds");
+                        System.exit(0);
+                    } else{
+                        System.out.println("Please select how you would like to recieve this money.");
+                        optionsToWithdraw(withdrawAmount);
+                        str = scan.nextLine();
+                        checkingAccount.subtractMoney(withdrawAmount);//add reciept
+                        validAmount = true;
+                    }
+                }
+                if(str.equals("S") || str.equals("s")){
+                    if(withdrawAmount % 5 != 0){
+                        System.out.println("Invalid Amount: Please try again!");
+                        System.exit(0);
+                    }
+                    if(withdrawAmount > savingsAccount.getAccountBalance()){
+                        System.out.println("Error: Invalid Funds");
+                        System.exit(0);
+                    } else{
+                        System.out.println("Please select how you would like to recieve this money.");
+                        optionsToWithdraw(withdrawAmount);
+                        str = scan.nextLine();
+                        savingsAccount.subtractMoney(withdrawAmount);//add reciept
+                        validAmount = true;
+                    }
+                }
+
+
+
             }
 
             if(answer == 2){
@@ -72,7 +115,7 @@ Scanner scan = new Scanner(System.in);
                 if(moneyFrom.equals("C") || moneyFrom.equals("c")){
                     if(checkingAccount.getAccountBalance() < amountTransferred){
                         System.out.println("Error: Insufficient Funds");
-                        System.exit(0);
+                        error = true;
                     }
                     checkingAccount.subtractMoney(amountTransferred);
                     savingsAccount.addMoney(amountTransferred);
@@ -87,7 +130,7 @@ Scanner scan = new Scanner(System.in);
                 if(moneyFrom.equals("S") || moneyFrom.equals("s")){
                     if(savingsAccount.getAccountBalance() < amountTransferred){
                         System.out.println("Error: Insufficient Funds");
-                        System.exit(0);
+                        error = true;
                     }
                     checkingAccount.addMoney(amountTransferred);
                     savingsAccount.subtractMoney(amountTransferred);
@@ -115,20 +158,63 @@ Scanner scan = new Scanner(System.in);
 
             }
 
-            System.out.println("Would you like to do anything else? (y/n)");
-            response = scan.nextLine();
-            if(response.equals("n") || response.equals("N")){
-                System.out.println("Thank you for being a customer!");
-                answer = 6;
+
+
+            if(!(error)) {
+                System.out.println("Would you like to do anything else? (y/n)");
+                response = scan.nextLine();
+                if (response.equals("n") || response.equals("N")) {
+                    System.out.println("Thank you for being a customer!");
+                    answer = 6;
+                }
+                if (response.equals("y") || response.equals("Y")) {
+                    System.out.println("Please re-enter your password.");
+                    enteredPIN = scan.nextInt();
+                    if (enteredPIN != customer.getPIN()) {
+                        System.out.println("Error: Incorrect PIN");
+                        error = true;
+                    }
+                }
             }
-            if(response.equals("y") || response.equals("Y")){
-                System.out.println("Please re-enter your password.");
-                enteredPIN = scan.nextInt();
+
+            if(error){
+                System.out.println("Because of your error, we will log you out for security purpose.");
+                System.out.println("We are sorry for any inconvenience");
             }
 
         }
+
+
     }
 
+    public void optionsToWithdraw(int amount){
+        int numberOfFives;
+        int numberOfTwenties = 0;
+        int numberOfOptions;
+
+        if(amount % 5 == 0 && amount - 20 < 0){
+            numberOfFives = amount / 5;
+            System.out.println(numberOfFives + " 5 Dollar Bills");
+        }
+        if(amount % 5 == 0 && amount - 20 >= 0){
+            numberOfOptions = (amount / 20) + 1;
+            numberOfFives = amount / 5;
+
+            for(int i = 1; i <= numberOfOptions; i++){
+                System.out.println("Option " + i + ": " + numberOfFives + " Five Dollar Bills and " + numberOfTwenties + " Twenty Dollar Bills");
+
+                if(numberOfFives >= 4){
+                    numberOfFives -= 4;
+                    numberOfTwenties++;
+
+                }
+            }
+
+
+
+        }
+
+    }
     public void mainMenu(){
         System.out.println("(1) Withdraw Money");
         System.out.println("(2) Deposit Money");
@@ -143,6 +229,7 @@ Scanner scan = new Scanner(System.in);
        System.out.println("Reciept");
        System.out.println("--------");
     }
+
 }
 
-//stuff to add: error system, pin checking system, and logic for withdraw.
+//stuff to add: logic for withdraw.
