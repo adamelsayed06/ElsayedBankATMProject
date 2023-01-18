@@ -5,7 +5,7 @@ public class Account {
 
     public Account(String accountName, Customer owner){
         this.accountName = accountName;
-        accountBalance = 100;
+        accountBalance = 0;
         this.owner = owner;
     }
 
