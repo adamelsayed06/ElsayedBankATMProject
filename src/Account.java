@@ -14,7 +14,13 @@ public class Account {
         this.accountBalance = accountBalance;
         this.owner = owner;
     }
+    public int getAccountBalance(){
+        return accountBalance;
+    }
 
+    public String getAccountName(){
+        return accountName;
+    }
     public void addMoney(int deposit){
         accountBalance += deposit;
     }
@@ -22,14 +28,4 @@ public class Account {
     public void subtractMoney(int withdraw){
         accountBalance -= withdraw;
     }
-
-    public String getAccountName(){
-        return accountName;
-    }
-
-    public int getAccountBalance(){
-        return accountBalance;
-    }
-
-
 }
