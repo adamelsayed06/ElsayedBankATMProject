@@ -45,7 +45,7 @@ public class ATM {
             answer = scan.nextInt();
             scan.nextLine();
 
-
+            validAmount = false;
             while (answer == 1 && !(validAmount)){
                 System.out.println("Which account would you like to withdraw from? (C)hecking or (S)avings");
                 String str = scan.nextLine();
@@ -131,31 +131,33 @@ public class ATM {
                     if(checkingAccount.getAccountBalance() < amountTransferred){
                         System.out.println("Error: Insufficient Funds");
                         printRecieptHeader();
-                        System.out.println("Failed to transfer $" + amountTransferred + "from checkings account due to insufficient funds.");
+                        System.out.println("Failed to transfer $" + amountTransferred + " from checkings account due to insufficient funds.");
                         error = true;
+                    } else {
+                        checkingAccount.subtractMoney(amountTransferred);
+                        savingsAccount.addMoney(amountTransferred);
+
+                        printRecieptHeader();
+
+                        System.out.println("Successfully deposited " + amountTransferred + " into savings account.");
+                        System.out.println("Successfully withdrew " + amountTransferred + " from checkings account");
                     }
-                    checkingAccount.subtractMoney(amountTransferred);
-                    savingsAccount.addMoney(amountTransferred);
-
-                    printRecieptHeader();
-
-                    System.out.println("Successfully deposited " + amountTransferred + " into savings account.");
-                    System.out.println("Successfully withdrew " + amountTransferred + " from checkings account");
                 }
 
                 if(moneyFrom.equals("S") || moneyFrom.equals("s")){
                     if(savingsAccount.getAccountBalance() < amountTransferred){
                         System.out.println("Error: Insufficient Funds");
                         printRecieptHeader();
-                        System.out.println("Failed to transfer $" + amountTransferred + "from savings account due to insufficient funds.");
+                        System.out.println("Failed to transfer $" + amountTransferred + " from savings account due to insufficient funds.");
                         error = true;
-                    }
-                    checkingAccount.addMoney(amountTransferred);
-                    savingsAccount.subtractMoney(amountTransferred);
+                    } else {
+                        checkingAccount.addMoney(amountTransferred);
+                        savingsAccount.subtractMoney(amountTransferred);
 
-                    printRecieptHeader();
-                    System.out.println("Successfully deposited " + amountTransferred + " into checking account.");
-                    System.out.println("Successfully withdrew " + amountTransferred  + " from savings account");
+                        printRecieptHeader();
+                        System.out.println("Successfully deposited " + amountTransferred + " into checking account.");
+                        System.out.println("Successfully withdrew " + amountTransferred + " from savings account");
+                    }
                 }
             }
             if(answer == 4){
