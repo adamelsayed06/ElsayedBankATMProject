@@ -12,13 +12,13 @@ public class ATM {
     private int amountTransferred;
     private int withdrawAmount;
     private boolean validAmount = false;
-private boolean error;
-Scanner scan = new Scanner(System.in);
+    private boolean error;
+    Scanner scan = new Scanner(System.in);
 
     public void welcomeUser(){
-        System.out.println("Welcome to dsahdja's ATM. Please enter your name");
+        System.out.println("Welcome to Adam's ATM. Please enter your name");
         name = scan.nextLine();
-        System.out.println("Please choose your 4-digit PIN.");
+        System.out.println("Please choose your PIN.");
         PIN = scan.nextInt();
         scan.nextLine();
     }
@@ -42,47 +42,51 @@ Scanner scan = new Scanner(System.in);
                 System.out.println("Which account would you like to withdraw from? (C)hecking or (S)avings");
                 String str = scan.nextLine();
 
-                System.out.println("How much would you like to withdraw?");
-                withdrawAmount = scan.nextInt();
-                scan.nextLine();
 
-                if(str.equals("C") || str.equals("c")){
-                    if(withdrawAmount % 5 != 0){
-                        System.out.println("Invalid Amount: Please try again!");
-                        System.exit(0);
-                    }
-                    if(withdrawAmount > checkingAccount.getAccountBalance()){
-                        System.out.println("Error: Invalid Funds");
-                        System.exit(0);
-                    } else{
-                        System.out.println("Please select how you would like to recieve this money.");
-                        optionsToWithdraw(withdrawAmount);
-                        str = scan.nextLine();
-                        checkingAccount.subtractMoney(withdrawAmount);//add reciept
-                        validAmount = true;
+
+                if(str.equals("C") || str.equals("c")) {
+                    while (!(validAmount)) {
+                        System.out.println("How much would you like to withdraw?");
+                        withdrawAmount = scan.nextInt();
+                        if (withdrawAmount % 5 != 0) {
+                            System.out.println("Invalid Amount: Please try again!");
+                        }
+                        else if (withdrawAmount > checkingAccount.getAccountBalance()) {
+                            System.out.println("Error: Insufficient Funds");
+                        } else if (!validAmount) {
+                            System.out.println("Please select how you would like to recieve this money.");
+                            optionsToWithdraw(withdrawAmount);
+                            str = scan.nextLine();
+                            checkingAccount.subtractMoney(withdrawAmount);
+                            printRecieptHeader();
+                            System.out.println("Withdrew $" + withdrawAmount + "From Checkings Account");
+                            validAmount = true;
+                        }
                     }
                 }
+
                 if(str.equals("S") || str.equals("s")){
-                    if(withdrawAmount % 5 != 0){
-                        System.out.println("Invalid Amount: Please try again!");
-                        System.exit(0);
-                    }
-                    if(withdrawAmount > savingsAccount.getAccountBalance()){
-                        System.out.println("Error: Invalid Funds");
-                        System.exit(0);
-                    } else{
-                        System.out.println("Please select how you would like to recieve this money.");
-                        optionsToWithdraw(withdrawAmount);
-                        str = scan.nextLine();
-                        savingsAccount.subtractMoney(withdrawAmount);//add reciept
-                        validAmount = true;
+                    while (!(validAmount)) {
+                        System.out.println("How much would you like to withdraw?");
+                        withdrawAmount = scan.nextInt();
+                        if (withdrawAmount % 5 != 0) {
+                            System.out.println("Invalid Amount: Please try again!");
+                        }
+                        else if (withdrawAmount > savingsAccount.getAccountBalance()) {
+                            System.out.println("Error: Insufficient Funds");
+
+                        } else if (!validAmount) {
+                            System.out.println("Please select how you would like to recieve this money.");
+                            optionsToWithdraw(withdrawAmount);
+                            str = scan.nextLine();
+                            savingsAccount.subtractMoney(withdrawAmount);
+                            printRecieptHeader();
+                            System.out.println("Withdrew $" + withdrawAmount + "From Savings Account");
+                            validAmount = true;
+                        }
                     }
                 }
-
-
-
             }
-
             if(answer == 2){
                 System.out.println("In which account will you be depositing money? (C)heckings or (S)avings?");
                 depositAccountType = scan.nextLine();
@@ -101,9 +105,6 @@ Scanner scan = new Scanner(System.in);
                     printRecieptHeader();
                     System.out.println("Deposited " + depositAmount + " into savings account.");
                 }
-
-
-
             }
 
             if(answer == 3){
@@ -124,7 +125,6 @@ Scanner scan = new Scanner(System.in);
 
                     System.out.println("Deposited " + amountTransferred + " into savings account.");
                     System.out.println("Withdraw " + amountTransferred + " from checkings account");
-
                 }
 
                 if(moneyFrom.equals("S") || moneyFrom.equals("s")){
@@ -140,24 +140,18 @@ Scanner scan = new Scanner(System.in);
                     System.out.println("Withdraw " + amountTransferred  + " from savings account");
                 }
             }
-
             if(answer == 4){
                 System.out.println("Savings Account: $" + savingsAccount.getAccountBalance());
                 System.out.println("Checkings Account: $" + checkingAccount.getAccountBalance());
-
             }
-
             if(answer == 5){
                 System.out.println("What would you like your new PIN to be?");
-                 newPIN = scan.nextInt();
-                 scan.nextLine();
-                 customer.setPIN(newPIN);
-
-                 printRecieptHeader();
+                newPIN = scan.nextInt();
+                scan.nextLine();
+                customer.setPIN(newPIN);
+                printRecieptHeader();
                 System.out.println("Changed PIN to " + newPIN);
-
             }
-
 
 
             if(!(error)) {
@@ -181,10 +175,7 @@ Scanner scan = new Scanner(System.in);
                 System.out.println("Because of your error, we will log you out for security purpose.");
                 System.out.println("We are sorry for any inconvenience");
             }
-
         }
-
-
     }
 
     public void optionsToWithdraw(int amount){
@@ -209,12 +200,9 @@ Scanner scan = new Scanner(System.in);
 
                 }
             }
-
-
-
         }
-
     }
+
     public void mainMenu(){
         System.out.println("(1) Withdraw Money");
         System.out.println("(2) Deposit Money");
@@ -223,13 +211,9 @@ Scanner scan = new Scanner(System.in);
         System.out.println("(5) Change PIN");
         System.out.println("(6) Exit");
     }
-
    public void printRecieptHeader(){
        System.out.println();
        System.out.println("Reciept");
        System.out.println("--------");
     }
-
 }
-
-//stuff to add: logic for withdraw.
