@@ -14,7 +14,7 @@ public class ATM {
     private boolean validAmount = false;
     private boolean error;
     private int securityPIN = -1;
-    private int transactionID = 1000;
+    private int transactionID = 1000; //starting transaction ID
     Scanner scan = new Scanner(System.in);
 
     public void welcomeUser(){
@@ -25,7 +25,7 @@ public class ATM {
         scan.nextLine();
     }
     public void start(){
-        welcomeUser();
+        welcomeUser(); //checks if user input the correct ID, if not asks them to re-enter until they do.
         while(securityPIN != PIN) {
             System.out.println("Please enter your PIN");
             securityPIN = scan.nextInt();
@@ -36,10 +36,10 @@ public class ATM {
 
         Customer customer = new Customer(PIN, name);
 
-        Account savingsAccount = new Account("Savings", customer);
+        Account savingsAccount = new Account("Savings", customer); //makes 2 accounts for the customer.
         Account checkingAccount = new Account("Checkings", customer);
 
-        while(answer != 6 && error == false){
+        while(answer != 6 && error == false){ //will repeat as long as the user does not want to exit and no error is detected.
 
             mainMenu();
             answer = scan.nextInt();
@@ -71,12 +71,12 @@ public class ATM {
                             checkingAccount.subtractMoney(withdrawAmount);
                             printRecieptHeader();
                             System.out.println("Successfully Withdrew $" + withdrawAmount + " From Checkings Account");
-                            validAmount = true;
+                            validAmount = true; //ends loop after successful withdrawl
                         }
                     }
                 }
 
-                if(str.equals("S") || str.equals("s")){
+                if(str.equals("S") || str.equals("s")){ //same logic, but uses savings account setter/getter methods
                     while (!(validAmount)) {
                         System.out.println("How much would you like to withdraw?");
                         withdrawAmount = scan.nextInt();
@@ -203,15 +203,15 @@ public class ATM {
         int numberOfTwenties = 0;
         int numberOfOptions;
 
-        if(amount % 5 == 0 && amount - 20 < 0){
+        if(amount % 5 == 0 && amount - 20 < 0){ // if amount is less than 20, only options that should pop up are with 5 dollar bills, this if statement checks for that
             numberOfFives = amount / 5;
             System.out.println(numberOfFives + " 5 Dollar Bills");
         }
         if(amount % 5 == 0 && amount - 20 >= 0){
             numberOfOptions = (amount / 20) + 1;
-            numberOfFives = amount / 5;
+            numberOfFives = amount / 5; // initalizes amount of 5's in the amount.
 
-            for(int i = 1; i <= numberOfOptions; i++){
+            for(int i = 1; i <= numberOfOptions; i++){ //gives new option, each option decreases number of fives by 4 and increase number of twenties by one.
                 System.out.println("Option " + i + ": " + numberOfFives + " Five Dollar Bills and " + numberOfTwenties + " Twenty Dollar Bills");
 
                 if(numberOfFives >= 4){
@@ -221,8 +221,6 @@ public class ATM {
                 }
             }
         }
-
-       String str = scan.nextLine();
     }
 
     public void mainMenu(){
@@ -238,6 +236,6 @@ public class ATM {
        System.out.println("Reciept");
        System.out.println("--------");
        System.out.println("Transaction ID: " + transactionID);
-       transactionID++;
+       transactionID++; //to produce unique ID every time
     }
 }
